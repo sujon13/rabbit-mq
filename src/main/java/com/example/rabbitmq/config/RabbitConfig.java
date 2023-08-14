@@ -1,9 +1,6 @@
 package com.example.rabbitmq.config;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -24,6 +21,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    public TopicExchange topicExchange1() {
+        return new TopicExchange("topicExchange1");
+    }
+
+    @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
         connectionFactory.setHost("localhost");
@@ -41,6 +43,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Queue queue() {
+        return new Queue("queue");
+    }
+
+    @Bean
     public Queue queue1() {
         return new Queue("queue1");
     }
@@ -48,6 +55,16 @@ public class RabbitConfig {
     @Bean
     public Queue queue2() {
         return new Queue("queue2");
+    }
+
+    @Bean
+    public Queue queue3() {
+        return new Queue("queue3");
+    }
+
+    @Bean
+    public Binding binding(TopicExchange topicExchange1, Queue queue) {
+        return BindingBuilder.bind(queue).to(topicExchange1).with("route.*");
     }
 
     @Bean
