@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class TestController {
-
     private final MessageProducer messageProducer;
 
     @GetMapping("/send/{message}")
