@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 public class TestController {
     private final MessageProducer messageProducer;
 
-    @GetMapping("/send/{message}")
-    public String sendMessage(@PathVariable String message, @RequestParam String exchange) {
+    @GetMapping("/send")
+    public String sendMessage(@RequestParam String message, @RequestParam String exchange) {
         messageProducer.sendMessage(exchange, message);
         return "Message sent: " + message;
     }

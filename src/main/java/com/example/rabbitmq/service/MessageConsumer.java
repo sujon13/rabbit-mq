@@ -20,9 +20,17 @@ public class MessageConsumer {
     @RabbitListener(queues = "queue")
     public void receiveTopicMessage(Message message) {
         var response = new String(message.getBody());
-        System.out.println("Received Topic message: " + response + " time: " + LocalDateTime.now());
+        System.out.println("Received Topic message[listener1]: " + response + " time: " + LocalDateTime.now());
 
-        rabbitTemplate.convertAndSend(message.getMessageProperties().getReplyTo(), buildResponseMessage(message));
+        //rabbitTemplate.convertAndSend(message.getMessageProperties().getReplyTo(), buildResponseMessage(message));
+    }
+
+    @RabbitListener(queues = "queue")
+    public void receiveTopicMessage2(Message message) {
+        var response = new String(message.getBody());
+        System.out.println("Received Topic message[listener2]: " + response + " time: " + LocalDateTime.now());
+
+        //rabbitTemplate.convertAndSend(message.getMessageProperties().getReplyTo(), buildResponseMessage(message));
     }
 
     private Message buildResponseMessage(Message request) {
@@ -31,15 +39,15 @@ public class MessageConsumer {
         return new Message(request.getBody(), messageProperties);
     }
 
-    @RabbitListener(queues = "queue1")
-    public void receiveMessage(String message) {
-        System.out.println("Received message: " + message + " time: " + new Date());
-        // Add your message processing logic here
-    }
+//    @RabbitListener(queues = "queue1")
+//    public void receiveFanoutMessage1(String message) {
+//        System.out.println("Fanout message listener (queue1): " + message + " time: " + new Date());
+//        // Add your message processing logic here
+//    }
 
-    @RabbitListener(queues = "queue2")
-    public void receiveMessage1(String message) {
-        System.out.println("Received message1: " + message + " time: " + new Date());
-        // Add your message processing logic here
-    }
+//    @RabbitListener(queues = "queue2")
+//    public void receiveFanoutMessage2(String message) {
+//        System.out.println("Fanout message listener (queue2): " + message + " time: " + new Date());
+//        // Add your message processing logic here
+//    }
 }

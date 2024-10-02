@@ -42,12 +42,16 @@ public class MessageProducer {
         Message requestMessage = buildMessage(message);
 
         switch (exchange) {
-            case "topic" ->  {
-                Message response = rabbitTemplate.sendAndReceive(topicExchange1.getName(), "route.1", requestMessage);
-                handleResponse(response);
+            case "topic1", "topic3" ->  {
+                char lastChar = exchange.charAt(exchange.length() - 1);
+                rabbitTemplate.send(topicExchange1.getName(), "route." + lastChar, requestMessage);
+                //handleResponse(response);
             }
-            case "topic3" -> rabbitTemplate.convertAndSend(topicExchange1.getName(), "route.3", message);
-            case "fanout1" -> rabbitTemplate.convertAndSend(fanoutExchange1.getName(), "", message);
+            //case "topic3" -> rabbitTemplate.convertAndSend(topicExchange1.getName(), "route.3", message);
+            case "fanout1" -> {
+                System.out.println("Fanout message sent at " + LocalDateTime.now());
+                rabbitTemplate.convertAndSend(fanoutExchange1.getName(), "", message);
+            }
             default -> rabbitTemplate.convertAndSend(fanoutExchange2.getName(), "", message);
         }
     }
